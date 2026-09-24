@@ -1,5 +1,6 @@
 package echo.music.iad1tya.ui.screens
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -83,22 +84,20 @@ fun SettingDialoge(
           buildList {
             add(
               Material3SettingsItem(
-                title = { Text(if (isLoggedIn) accountName else "Anonymous") },
+                title = { Text(if (isLoggedIn) accountName else "Harinath") },
                 description = {
-                  Text(if (isLoggedIn) accountEmail.ifEmpty { "Logged In" } else "Not Logged In")
+                  Text(if (isLoggedIn) accountEmail.ifEmpty { "Logged In" } else "harinath4496 • IRAH Personal Edition")
                 },
                 icon = painterResource(R.drawable.account),
-                trailingContent =
-                  if (isLoggedIn && !accountImageUrl.isNullOrBlank()) {
-                    {
-                      AsyncImage(
-                        model = accountImageUrl,
-                        contentDescription = "Profile Photo",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(40.dp).clip(CircleShape)
-                      )
-                    }
-                  } else null,
+                trailingContent = {
+                  val photo = if (isLoggedIn && !accountImageUrl.isNullOrBlank()) accountImageUrl else "https://github.com/harinath4496.png"
+                  AsyncImage(
+                    model = photo,
+                    contentDescription = "Profile Photo",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(40.dp).clip(CircleShape).border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                  )
+                },
                 onClick = {
                   onDismissRequest()
                   if (isLoggedIn) onNavigate("settings/account") else onNavigate("login")

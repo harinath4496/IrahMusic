@@ -234,8 +234,6 @@ constructor(
                   Download.STATE_COMPLETED -> {
                     database.updateDownloadedInfo(download.request.id, true, LocalDateTime.now())
                   }
-                  Download.STATE_FAILED,
-                  Download.STATE_STOPPED,
                   Download.STATE_REMOVING -> {
                     database.updateDownloadedInfo(download.request.id, false, null)
                   }
@@ -251,7 +249,13 @@ constructor(
     val result = mutableMapOf<String, Download>()
     downloadManager.downloadIndex.getDownloads().use { cursor ->
       while (cursor.moveToNext()) {
-        result[cursor.download.request.id] = cursor.download
+        val dl = cursor.download
+        result[dl.request.id] = dl
+        if (dl.state == Download.STATE_COMPLETED) {
+          scope.launch {
+            database.updateDownloadedInfo(dl.request.id, true, LocalDateTime.now())
+          }
+        }
       }
     }
     downloads.value = result

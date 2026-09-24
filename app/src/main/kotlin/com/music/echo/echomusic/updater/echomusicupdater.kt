@@ -341,7 +341,7 @@ fun UpdateScreen(navController: NavHostController) {
                     } else {
                       val urlToDownload =
                         currentStatus.apkUrl
-                          ?: "https://github.com/EchoMusicApp/Echo-Music/releases/download/${currentStatus.version}/echomusic.apk"
+                          ?: "https://github.com/harinath4496/IrahMusic/releases/download/${currentStatus.version}/IRAH_Music-${currentStatus.version}-arm64-debug.apk"
 
                       val constraints =
                         Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
@@ -674,7 +674,7 @@ suspend fun checkForUpdate(
 ) {
   withContext(Dispatchers.IO) {
     try {
-      val url = URL("https://api.github.com/repos/EchoMusicApp/Echo-Music/releases/latest")
+      val url = URL("https://api.github.com/repos/harinath4496/IrahMusic/releases/latest")
       val json = url.openStream().bufferedReader().use { it.readText() }
       val targetRelease = JSONObject(json)
 
@@ -694,7 +694,7 @@ suspend fun checkForUpdate(
         try {
           val changelogUrl =
             URL(
-              "https://github.com/EchoMusicApp/Echo-Music/releases/download/$tagWithPrefix/changelog.json"
+              "https://github.com/harinath4496/IrahMusic/releases/download/$tagWithPrefix/changelog.json"
             )
           val changelogJson = changelogUrl.openStream().bufferedReader().use { it.readText() }
           val changelogData = JSONObject(changelogJson)
