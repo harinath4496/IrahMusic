@@ -11,6 +11,7 @@
   [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
   [![Gradle](https://img.shields.io/badge/Gradle-9.5-02303A?style=for-the-badge&logo=gradle&logoColor=white)](https://gradle.org)
   [![Status](https://img.shields.io/badge/Edition-Custom%20Personalized%20Build-FF4081?style=for-the-badge)](https://github.com/harinath4496/IrahMusic)
+  [![Download APK](https://img.shields.io/badge/Download-IRAH%20Music%20v1.3.0%20APK-00C853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/harinath4496/IrahMusic/releases/latest)
 
   <br>
 
