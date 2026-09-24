@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.Painter
@@ -133,8 +134,8 @@ private fun WelcomeAppCard() {
         contentDescription = null,
         modifier =
           Modifier.size(100.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceContainer),
+            .clip(RoundedCornerShape(22.dp))
+            .background(Color.Black),
       )
       Spacer(Modifier.height(4.dp))
       Text(

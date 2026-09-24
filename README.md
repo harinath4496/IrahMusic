@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="assets/Echo-new.png" alt="IRAH Music Logo" width="130" style="border-radius: 28px;"/>
+  <img src="assets/irah_music_logo.png" alt="IRAH Music Logo" width="160" style="border-radius: 32px;"/>
 
   # IRAH Music 🎵
 
