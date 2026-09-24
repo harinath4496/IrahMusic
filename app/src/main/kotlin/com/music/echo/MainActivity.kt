@@ -24,14 +24,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.add
@@ -1101,63 +1098,14 @@ class MainActivity : ComponentActivity() {
                 Row {
                   TopAppBar(
                     title = {
-                      if (navBackStackEntry?.destination?.route == Screens.Home.route) {
-                        Column {
-                          Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                              text = "IRAH Music",
-                              style =
-                                MaterialTheme.typography.titleLarge.copy(
-                                  fontWeight = FontWeight.Bold,
-                                  fontSize = 20.sp
-                                ),
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Surface(
-                              shape = RoundedCornerShape(6.dp),
-                              color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
-                            ) {
-                              Text(
-                                text = "HARINATH",
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                style =
-                                  MaterialTheme.typography.labelSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 10.sp,
-                                    color = MaterialTheme.colorScheme.primary
-                                  )
-                              )
-                            }
-                          }
-                          val greeting = remember {
-                            val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-                            when (hour) {
-                              in 5..11 -> "Good morning, Harinath ✨"
-                              in 12..16 -> "Good afternoon, Harinath 🎵"
-                              in 17..21 -> "Good evening, Harinath 🎧"
-                              else -> "Late night vibe, Harinath 🌙"
-                            }
-                          }
-                          Text(
-                            text = greeting,
-                            style =
-                              MaterialTheme.typography.labelMedium.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 12.sp
-                              )
-                          )
-                        }
-                      } else {
-                        Text(
-                          text = currentTitle,
-                          style =
-                            MaterialTheme.typography.titleLarge.copy(
-                              fontWeight = FontWeight.Bold,
-                              fontSize = 24.sp
-                            ),
-                        )
-                      }
+                      Text(
+                        text = currentTitle,
+                        style =
+                          MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 24.sp
+                          ),
+                      )
                     },
                     actions = {
                       if (showHistoryButton) {
@@ -1186,16 +1134,19 @@ class MainActivity : ComponentActivity() {
                       }
                       IconButton(onClick = { showSettingDialoge = true }) {
                         BadgedBox(badge = {}) {
-                          val avatarUrl = accountImageUrl ?: "https://github.com/harinath4496.png"
-                          AsyncImage(
-                            model = avatarUrl,
-                            contentDescription = stringResource(R.string.account),
-                            modifier =
-                              Modifier.size(28.dp)
-                                .clip(CircleShape)
-                                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape),
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop
-                          )
+                          if (accountImageUrl != null) {
+                            AsyncImage(
+                              model = accountImageUrl,
+                              contentDescription = stringResource(R.string.account),
+                              modifier = Modifier.size(24.dp).clip(CircleShape)
+                            )
+                          } else {
+                            Icon(
+                              painter = painterResource(R.drawable.settings),
+                              contentDescription = stringResource(R.string.account),
+                              modifier = Modifier.size(24.dp)
+                            )
+                          }
                         }
                       }
                     },

@@ -9,7 +9,6 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -50,7 +49,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
@@ -86,7 +84,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -952,141 +949,6 @@ fun HomeScreen(
           }
         }
 
-        item(key = "harinath_hero_card") {
-          Card(
-            modifier =
-              Modifier.fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 6.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors =
-              CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
-              ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
-          ) {
-            Column(
-              modifier = Modifier.padding(14.dp),
-              verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-              Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-              ) {
-                Row(
-                  verticalAlignment = Alignment.CenterVertically,
-                  horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                  AsyncImage(
-                    model = "https://github.com/harinath4496.png",
-                    contentDescription = "Harinath Profile",
-                    contentScale = ContentScale.Crop,
-                    modifier =
-                      Modifier.size(38.dp)
-                        .clip(CircleShape)
-                        .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
-                  )
-                  Column {
-                    Text(
-                      text = "Crafted for Harinath",
-                      style =
-                        MaterialTheme.typography.titleMedium.copy(
-                          fontWeight = FontWeight.Bold,
-                          fontSize = 15.sp
-                        )
-                    )
-                    Text(
-                      text = "IRAH Music • Lossless & Personal",
-                      style =
-                        MaterialTheme.typography.bodySmall.copy(
-                          color = MaterialTheme.colorScheme.primary,
-                          fontWeight = FontWeight.SemiBold,
-                          fontSize = 11.sp
-                        )
-                    )
-                  }
-                }
-
-                Surface(
-                  shape = CircleShape,
-                  color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                  onClick = { navController.navigate("stats") }
-                ) {
-                  Icon(
-                    painter = painterResource(R.drawable.discover_tune),
-                    contentDescription = "Listening Stats",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(8.dp).size(18.dp)
-                  )
-                }
-              }
-
-              Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-              ) {
-                Surface(
-                  shape = RoundedCornerShape(12.dp),
-                  color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                  border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)),
-                  onClick = {
-                    navController.navigate("search/Lana Del Rey")
-                  },
-                  modifier = Modifier.weight(1f)
-                ) {
-                  Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                  ) {
-                    Icon(
-                      painter = painterResource(R.drawable.ic_heart),
-                      contentDescription = null,
-                      tint = Color(0xFFFF4081),
-                      modifier = Modifier.size(15.dp)
-                    )
-                    Text(
-                      text = "Lana Del Rey",
-                      style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                      maxLines = 1,
-                      overflow = TextOverflow.Ellipsis
-                    )
-                  }
-                }
-
-                Surface(
-                  shape = RoundedCornerShape(12.dp),
-                  color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                  border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)),
-                  onClick = {
-                    navController.navigate(echo.music.iad1tya.ui.screens.Screens.Library.route)
-                  },
-                  modifier = Modifier.weight(1f)
-                ) {
-                  Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                  ) {
-                    Icon(
-                      painter = painterResource(R.drawable.library_music_filled),
-                      contentDescription = null,
-                      tint = MaterialTheme.colorScheme.primary,
-                      modifier = Modifier.size(15.dp)
-                    )
-                    Text(
-                      text = "My Library",
-                      style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                      maxLines = 1,
-                      overflow = TextOverflow.Ellipsis
-                    )
-                  }
-                }
-              }
-            }
-          }
-        }
-
         homeSections.forEach { section ->
           when (section) {
             HomeSection.SpeedDial -> {
@@ -1095,7 +957,7 @@ fun HomeScreen(
                 ?.let { items ->
                   item(key = "speed_dial_title") {
                     NavigationTitle(
-                      title = "Harinath's Speed Dial",
+                      title = stringResource(R.string.speed_dial),
                       modifier = Modifier.animateItem()
                     )
                   }
@@ -1316,7 +1178,7 @@ fun HomeScreen(
                 ?.let { quickPicks ->
                   item(key = "quick_picks_title") {
                     NavigationTitle(
-                      title = "Handpicked for Harinath",
+                      title = stringResource(R.string.quick_picks),
                       modifier = Modifier.animateItem()
                     )
                   }
@@ -1439,7 +1301,7 @@ fun HomeScreen(
                 ?.let { playlists ->
                   item(key = "community_playlists_title") {
                     NavigationTitle(
-                      title = "Curated Community Mixes",
+                      title = stringResource(R.string.from_the_community),
                       modifier = Modifier.animateItem()
                     )
                   }
@@ -1474,7 +1336,7 @@ fun HomeScreen(
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { discoverList ->
                   item(key = "daily_discover_title") {
-                    val title = "Harinath's Daily Discover"
+                    val title = stringResource(R.string.your_daily_discover)
                     NavigationTitle(
                       title = title,
                       onPlayAllClick = {
@@ -1532,7 +1394,7 @@ fun HomeScreen(
                 ?.let { keepListening ->
                   item(key = "keep_listening_title") {
                     NavigationTitle(
-                      title = "Continue Listening, Harinath",
+                      title = stringResource(R.string.keep_listening),
                       modifier = Modifier.animateItem()
                     )
                   }
@@ -1626,7 +1488,7 @@ fun HomeScreen(
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { forgottenFavorites ->
                   item(key = "forgotten_favorites_title") {
-                    val forgottenFavoritesTitle = "Rediscover Harinath's Gems"
+                    val forgottenFavoritesTitle = stringResource(R.string.forgotten_favorites)
                     NavigationTitle(
                       title = forgottenFavoritesTitle,
                       modifier = Modifier.animateItem(),
