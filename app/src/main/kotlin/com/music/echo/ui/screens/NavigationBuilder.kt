@@ -280,7 +280,23 @@ fun NavGraphBuilder.navigationBuilder(
     YouTubeBrowseScreen(navController)
   }
 
-  composable("settings") { SettingsScreen(navController, scrollBehavior) }
+  composable(
+    route = "settings?highlightKey={highlightKey}",
+    arguments =
+      listOf(
+        navArgument("highlightKey") {
+          type = NavType.StringType
+          nullable = true
+          defaultValue = null
+        }
+      )
+  ) { backStackEntry ->
+    SettingsScreen(
+      navController = navController,
+      scrollBehavior = scrollBehavior,
+      highlightKey = backStackEntry.arguments?.getString("highlightKey")
+    )
+  }
 
   composable(
     route = "settings/update?highlightKey={highlightKey}",

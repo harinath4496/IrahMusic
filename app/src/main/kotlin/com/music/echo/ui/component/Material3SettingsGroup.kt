@@ -80,15 +80,35 @@ fun Material3SettingsGroup(
             else -> RoundedCornerShape(4.dp)
           }
 
+        val containerColor =
+          if (item.isHighlighted) {
+            val blinkAnim = androidx.compose.runtime.remember { androidx.compose.animation.core.Animatable(0f) }
+            androidx.compose.runtime.LaunchedEffect(item.isHighlighted) {
+              repeat(4) {
+                blinkAnim.animateTo(1f, animationSpec = androidx.compose.animation.core.tween(350, easing = androidx.compose.animation.core.FastOutSlowInEasing))
+                blinkAnim.animateTo(0f, animationSpec = androidx.compose.animation.core.tween(350, easing = androidx.compose.animation.core.FastOutSlowInEasing))
+              }
+            }
+            androidx.compose.ui.graphics.lerp(
+              MaterialTheme.colorScheme.surfaceVariant,
+              MaterialTheme.colorScheme.primaryContainer,
+              blinkAnim.value
+            )
+          } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+          }
+
         Card(
           modifier = Modifier.fillMaxWidth().animateContentSize(),
           shape = shape,
           colors =
             CardDefaults.cardColors(
-              containerColor =
-                if (item.isHighlighted) MaterialTheme.colorScheme.surfaceVariant
-                else MaterialTheme.colorScheme.surfaceContainerHigh
+              containerColor = containerColor
             ),
+          border =
+            if (item.isHighlighted) {
+              androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+            } else null,
           elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
           Material3SettingsItemRow(item = item, compact = compact, scrollState = scrollState)

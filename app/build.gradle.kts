@@ -32,7 +32,7 @@ android {
   defaultConfig {
     applicationId = "echo.music.iad1tya"
     minSdk = 26
-    targetSdk = 36
+    targetSdk = 35
     versionCode = 158
     versionName = "1.3.0"
 
@@ -132,19 +132,28 @@ android {
       val keystoreFile = rootProject.file("keystore.jks")
       if (keystoreFile.exists()) {
         storeFile = keystoreFile
+        storePassword = System.getenv("STORE_PASSWORD") ?: "android"
+        keyAlias = System.getenv("KEY_ALIAS") ?: "androiddebugkey"
+        keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
       } else {
         val localKeystore = file("keystore/release.keystore")
         if (localKeystore.exists()) storeFile = localKeystore
+        storePassword = System.getenv("STORE_PASSWORD")
+        keyAlias = System.getenv("KEY_ALIAS")
+        keyPassword = System.getenv("KEY_PASSWORD")
       }
-      storePassword = System.getenv("STORE_PASSWORD")
-      keyAlias = System.getenv("KEY_ALIAS")
-      keyPassword = System.getenv("KEY_PASSWORD")
+      enableV1Signing = true
+      enableV2Signing = true
+      enableV3Signing = true
     }
     getByName("debug") {
       keyAlias = "androiddebugkey"
       keyPassword = "android"
       storePassword = "android"
       storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+      enableV1Signing = true
+      enableV2Signing = true
+      enableV3Signing = true
     }
   }
 
@@ -154,18 +163,11 @@ android {
       isShrinkResources = true
       isCrunchPngs = false
       isDebuggable = false
-      val releaseKeystore = rootProject.file("keystore.jks")
-      signingConfig =
-        if (releaseKeystore.exists() && System.getenv("STORE_PASSWORD") != null) {
-          signingConfigs.getByName("release")
-        } else {
-          signingConfigs.getByName("debug")
-        }
+      signingConfig = signingConfigs.getByName("release")
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       buildConfigField("String", "ARCHITECTURE", "\"release\"")
     }
     debug {
-      applicationIdSuffix = ".debug"
       isDebuggable = true
       signingConfig = signingConfigs.getByName("debug")
       buildConfigField("String", "ARCHITECTURE", "\"debug\"")

@@ -654,7 +654,12 @@ class MainActivity : ComponentActivity() {
           version = availableUpdateVersion,
           changelog = availableUpdateChangelog,
           description = availableUpdateDescription,
-          onDismiss = { showUpdateDialog = false }
+          onDismiss = { showUpdateDialog = false },
+          onUpdate = {
+            showUpdateDialog = false
+            val updateTitle = context.getString(R.string.system_update)
+            navController.navigate("settings?highlightKey=" + android.net.Uri.encode(updateTitle))
+          }
         )
       } else {
         whatsNewInfo?.let { info ->
@@ -952,7 +957,11 @@ class MainActivity : ComponentActivity() {
         }
 
         LaunchedEffect(Unit) {
-          if (pendingIntent != null) {
+          val incomingRoute = pendingIntent?.getStringExtra("open_route") ?: intent?.getStringExtra("open_route")
+          if (!incomingRoute.isNullOrEmpty()) {
+            navController.navigate(incomingRoute)
+            pendingIntent = null
+          } else if (pendingIntent != null) {
             handleDeepLinkIntent(pendingIntent!!, navController)
             handleRecognitionIntent(pendingIntent!!, navController)
             handleAssistantSearchIntent(pendingIntent!!, navController)
@@ -975,7 +984,10 @@ class MainActivity : ComponentActivity() {
         DisposableEffect(Unit) {
           val listener =
             Consumer<Intent> { intent ->
-              if (intent.action == Intent.ACTION_VIEW || intent.action == Intent.ACTION_SEND) {
+              val incomingRoute = intent.getStringExtra("open_route")
+              if (!incomingRoute.isNullOrEmpty()) {
+                navController.navigate(incomingRoute)
+              } else if (intent.action == Intent.ACTION_VIEW || intent.action == Intent.ACTION_SEND) {
                 handleDeepLinkIntent(intent, navController)
               } else if (intent.action == ACTION_RECOGNITION) {
                 handleRecognitionIntent(intent, navController)
@@ -1077,14 +1089,36 @@ class MainActivity : ComponentActivity() {
                 Row {
                   TopAppBar(
                     title = {
-                      Text(
-                        text = currentTitle,
-                        style =
-                          MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp
-                          ),
-                      )
+                      if (navBackStackEntry?.destination?.route == Screens.Home.route) {
+                        Column {
+                          Text(
+                            text = "IRAH Music",
+                            style =
+                              MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp
+                              ),
+                          )
+                          Text(
+                            text = "dev by Hari<3",
+                            style =
+                              MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.primary
+                              ),
+                          )
+                        }
+                      } else {
+                        Text(
+                          text = currentTitle,
+                          style =
+                            MaterialTheme.typography.titleLarge.copy(
+                              fontWeight = FontWeight.Bold,
+                              fontSize = 24.sp
+                            ),
+                        )
+                      }
                     },
                     actions = {
                       if (showHistoryButton) {

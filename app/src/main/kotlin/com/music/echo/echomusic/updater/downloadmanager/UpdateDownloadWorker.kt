@@ -44,19 +44,42 @@ class UpdateDownloadWorker(private val context: Context, workerParams: WorkerPar
       } catch (e: Exception) {}
 
       try {
-        val url = URL(apkUrl)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-        connection.connectTimeout = 15000
-        connection.readTimeout = 15000
-        connection.connect()
+        var currentUrl = apkUrl
+        var connection: HttpURLConnection? = null
+        var redirectCount = 0
+        val maxRedirects = 6
 
-        if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+        while (redirectCount < maxRedirects) {
+          val url = URL(currentUrl)
+          val conn = (url.openConnection() as HttpURLConnection).apply {
+            instanceFollowRedirects = true
+            requestMethod = "GET"
+            connectTimeout = 20000
+            readTimeout = 20000
+            setRequestProperty("User-Agent", "IRAH-Music-Updater")
+          }
+          conn.connect()
+          val code = conn.responseCode
+          if (code in 300..399) {
+            val newLocation = conn.getHeaderField("Location")
+            conn.disconnect()
+            if (!newLocation.isNullOrEmpty()) {
+              currentUrl = newLocation
+              redirectCount++
+              continue
+            }
+          }
+          connection = conn
+          break
+        }
+
+        if (connection == null || connection.responseCode != HttpURLConnection.HTTP_OK) {
+          val code = connection?.responseCode ?: -1
           DownloadNotificationManager.showDownloadFailed(
             version,
-            context.getString(R.string.server_error, connection.responseCode)
+            context.getString(R.string.server_error, code)
           )
-          if (connection.responseCode >= 500) {
+          if (code >= 500) {
             return@withContext Result.retry()
           }
           return@withContext Result.failure()

@@ -341,7 +341,7 @@ fun UpdateScreen(navController: NavHostController) {
                     } else {
                       val urlToDownload =
                         currentStatus.apkUrl
-                          ?: "https://github.com/harinath4496/IrahMusic/releases/download/${currentStatus.version}/IRAH_Music-${currentStatus.version}-arm64-debug.apk"
+                          ?: "https://github.com/harinath4496/IrahMusic/releases/download/${currentStatus.version}/IRAH_Music-${currentStatus.version}-arm64-release.apk"
 
                       val constraints =
                         Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
@@ -734,18 +734,26 @@ suspend fun checkForUpdate(
 
         var apkSizeInMB = ""
         var apkDownloadUrl = ""
+        var selectedAsset: JSONObject? = null
         for (j in 0 until assets.length()) {
           val asset = assets.getJSONObject(j)
-          val assetName = asset.getString("name")
-          if (
-            assetName.endsWith(".apk", ignoreCase = true) &&
-              !assetName.lowercase().contains("debug")
-          ) {
-            val apkSizeInBytes = asset.getLong("size")
-            apkSizeInMB = String.format("%.1f", apkSizeInBytes / (1024.0 * 1024.0))
-            apkDownloadUrl = asset.getString("browser_download_url")
-            break
+          val assetName = asset.getString("name").lowercase()
+          if (assetName.endsWith(".apk")) {
+            if (selectedAsset == null) {
+              selectedAsset = asset
+            } else if (assetName.contains("arm64") && !assetName.contains("debug")) {
+              selectedAsset = asset
+              break
+            } else if (!assetName.contains("debug") && selectedAsset.getString("name").lowercase().contains("debug")) {
+              selectedAsset = asset
+            }
           }
+        }
+
+        if (selectedAsset != null) {
+          val apkSizeInBytes = selectedAsset.getLong("size")
+          apkSizeInMB = String.format("%.1f", apkSizeInBytes / (1024.0 * 1024.0))
+          apkDownloadUrl = selectedAsset.getString("browser_download_url")
         }
 
         if (apkDownloadUrl.isNotEmpty()) {
@@ -814,7 +822,7 @@ suspend fun fetchChangelogForVersion(currentVersion: String): WhatsNewInfo? =
     try {
       val cleanCurrent = currentVersion.removePrefix("b").removePrefix("v").trim()
       val releasesJson =
-        openTimedStream("https://api.github.com/repos/EchoMusicApp/Echo-Music/releases")
+        openTimedStream("https://api.github.com/repos/harinath4496/IrahMusic/releases")
           .bufferedReader()
           .use { it.readText() }
       val releases = JSONArray(releasesJson)
@@ -836,7 +844,7 @@ suspend fun fetchChangelogForVersion(currentVersion: String): WhatsNewInfo? =
       try {
         val changelogJson =
           openTimedStream(
-              "https://github.com/EchoMusicApp/Echo-Music/releases/download/$tag/changelog.json"
+              "https://github.com/harinath4496/IrahMusic/releases/download/$tag/changelog.json"
             )
             .bufferedReader()
             .use { it.readText() }
