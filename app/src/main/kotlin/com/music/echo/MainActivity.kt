@@ -553,30 +553,33 @@ class MainActivity : ComponentActivity() {
 
     LaunchedEffect(enableHighRefreshRate) {
       val window = this@MainActivity.window
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val layoutParams = window.attributes
-        if (enableHighRefreshRate) {
-          layoutParams.preferredDisplayModeId = 0
+      val display =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          this@MainActivity.display
         } else {
-          val modes = window.windowManager.defaultDisplay.supportedModes
-          val mode60 =
-            modes.firstOrNull { kotlin.math.abs(it.refreshRate - 60f) < 1f }
-              ?: modes.minByOrNull { kotlin.math.abs(it.refreshRate - 60f) }
+          @Suppress("DEPRECATION")
+          window.windowManager.defaultDisplay
+        }
+      val modes = display?.supportedModes ?: emptyArray()
 
-          if (mode60 != null) {
-            layoutParams.preferredDisplayModeId = mode60.modeId
-          }
+      val layoutParams = window.attributes
+      if (enableHighRefreshRate) {
+        val highestMode = modes.maxByOrNull { it.refreshRate }
+        if (highestMode != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          layoutParams.preferredDisplayModeId = highestMode.modeId
         }
-        window.attributes = layoutParams
+        layoutParams.preferredRefreshRate = highestMode?.refreshRate ?: 120f
       } else {
-        val params = window.attributes
-        if (enableHighRefreshRate) {
-          params.preferredRefreshRate = 0f
-        } else {
-          params.preferredRefreshRate = 60f
+        val mode60 =
+          modes.firstOrNull { kotlin.math.abs(it.refreshRate - 60f) < 1f }
+            ?: modes.minByOrNull { kotlin.math.abs(it.refreshRate - 60f) }
+
+        if (mode60 != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          layoutParams.preferredDisplayModeId = mode60.modeId
         }
-        window.attributes = params
+        layoutParams.preferredRefreshRate = 60f
       }
+      window.attributes = layoutParams
     }
 
     val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.AUTO)
@@ -640,8 +643,6 @@ class MainActivity : ComponentActivity() {
 
     val (enableHaptics) =
       rememberPreference(echo.music.iad1tya.constants.EnableHapticsKey, defaultValue = false)
-    val view = LocalView.current
-    var lastScrollHapticTime by remember { mutableStateOf(0L) }
 
     echomusicTheme(
       darkTheme = useDarkTheme,
@@ -674,28 +675,6 @@ class MainActivity : ComponentActivity() {
         modifier =
           Modifier.fillMaxSize()
             .background(if (pureBlack) Color.Black else MaterialTheme.colorScheme.surface)
-            .pointerInput(enableHaptics) {
-              if (enableHaptics) {
-                awaitPointerEventScope {
-                  while (true) {
-                    val event =
-                      awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
-                    val isClick = event.changes.any { it.changedToDown() }
-                    val isScroll =
-                      event.changes.any { it.positionChange() != Offset.Zero && it.pressed }
-                    if (isClick) {
-                      view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-                    } else if (isScroll) {
-                      val currentTime = System.currentTimeMillis()
-                      if (currentTime - lastScrollHapticTime > 100) {
-                        view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
-                        lastScrollHapticTime = currentTime
-                      }
-                    }
-                  }
-                }
-              }
-            }
       ) {
         val focusManager = LocalFocusManager.current
         val density = LocalDensity.current

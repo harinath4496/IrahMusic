@@ -154,7 +154,13 @@ android {
       isShrinkResources = true
       isCrunchPngs = false
       isDebuggable = false
-      signingConfig = signingConfigs.getByName("release")
+      val releaseKeystore = rootProject.file("keystore.jks")
+      signingConfig =
+        if (releaseKeystore.exists() && System.getenv("STORE_PASSWORD") != null) {
+          signingConfigs.getByName("release")
+        } else {
+          signingConfigs.getByName("debug")
+        }
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       buildConfigField("String", "ARCHITECTURE", "\"release\"")
     }
