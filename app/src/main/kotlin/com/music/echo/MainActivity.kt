@@ -522,6 +522,27 @@ class MainActivity : ComponentActivity() {
       val prefs = context.dataStore.data.first()
 
       if (getAutoUpdateCheckSetting(context)) {
+        try {
+          val workManager = androidx.work.WorkManager.getInstance(applicationContext)
+          val updateWorkRequest =
+            androidx.work.PeriodicWorkRequestBuilder<echo.music.iad1tya.echomusic.updater.UpdateCheckWorker>(
+              6,
+              java.util.concurrent.TimeUnit.HOURS
+            )
+            .setConstraints(
+              androidx.work.Constraints.Builder()
+                .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+                .build()
+            )
+            .build()
+          workManager.enqueueUniquePeriodicWork(
+            "UpdateCheckWorker",
+            androidx.work.ExistingPeriodicWorkPolicy.KEEP,
+            updateWorkRequest
+          )
+        } catch (e: Exception) {
+          Log.e("UpdateCheck", "Failed to schedule background update worker", e)
+        }
 
         delay(2000L)
         checkForUpdate(

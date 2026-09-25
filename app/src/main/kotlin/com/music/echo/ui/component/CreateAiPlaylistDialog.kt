@@ -51,9 +51,7 @@ fun CreateAiPlaylistDialog(
     rememberLauncherForActivityResult(
       contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-      val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
-      val coarseGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
-      val isGranted = fineGranted || coarseGranted
+      val isGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
 
       val activity = context as? Activity
       val isPermanentlyDenied =
@@ -61,12 +59,8 @@ fun CreateAiPlaylistDialog(
           activity?.let {
             !ActivityCompat.shouldShowRequestPermissionRationale(
               it,
-              Manifest.permission.ACCESS_FINE_LOCATION
-            ) &&
-              !ActivityCompat.shouldShowRequestPermissionRationale(
-                it,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-              )
+              Manifest.permission.ACCESS_COARSE_LOCATION
+            )
           } ?: false
 
       viewModel.onWeatherToggled(
@@ -119,18 +113,13 @@ fun CreateAiPlaylistDialog(
                 .clickable {
                   val target = !weatherEnabled
                   if (target) {
-                    val hasFine =
-                      ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                      ) == PackageManager.PERMISSION_GRANTED
                     val hasCoarse =
                       ContextCompat.checkSelfPermission(
                         context,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                       ) == PackageManager.PERMISSION_GRANTED
 
-                    if (hasFine || hasCoarse) {
+                    if (hasCoarse) {
                       viewModel.onWeatherToggled(
                         enabled = true,
                         context = context,
@@ -140,7 +129,6 @@ fun CreateAiPlaylistDialog(
                     } else {
                       locationPermissionLauncher.launch(
                         arrayOf(
-                          Manifest.permission.ACCESS_FINE_LOCATION,
                           Manifest.permission.ACCESS_COARSE_LOCATION
                         )
                       )
@@ -175,18 +163,13 @@ fun CreateAiPlaylistDialog(
               checked = weatherEnabled,
               onCheckedChange = { checked ->
                 if (checked) {
-                  val hasFine =
-                    ContextCompat.checkSelfPermission(
-                      context,
-                      Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
                   val hasCoarse =
                     ContextCompat.checkSelfPermission(
                       context,
                       Manifest.permission.ACCESS_COARSE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
 
-                  if (hasFine || hasCoarse) {
+                  if (hasCoarse) {
                     viewModel.onWeatherToggled(
                       enabled = true,
                       context = context,
@@ -196,7 +179,6 @@ fun CreateAiPlaylistDialog(
                   } else {
                     locationPermissionLauncher.launch(
                       arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                       )
                     )
@@ -295,7 +277,6 @@ fun CreateAiPlaylistDialog(
                           } else {
                             locationPermissionLauncher.launch(
                               arrayOf(
-                                Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                               )
                             )

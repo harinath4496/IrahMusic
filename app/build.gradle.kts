@@ -129,19 +129,11 @@ android {
       keyPassword = "android"
     }
     create("release") {
-      val keystoreFile = rootProject.file("keystore.jks")
-      if (keystoreFile.exists()) {
-        storeFile = keystoreFile
-        storePassword = System.getenv("STORE_PASSWORD") ?: "android"
-        keyAlias = System.getenv("KEY_ALIAS") ?: "androiddebugkey"
-        keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
-      } else {
-        val localKeystore = file("keystore/release.keystore")
-        if (localKeystore.exists()) storeFile = localKeystore
-        storePassword = System.getenv("STORE_PASSWORD")
-        keyAlias = System.getenv("KEY_ALIAS")
-        keyPassword = System.getenv("KEY_PASSWORD")
-      }
+      val keystoreFile = rootProject.file("release.keystore")
+      storeFile = keystoreFile
+      storePassword = System.getenv("STORE_PASSWORD") ?: "irahmusic123"
+      keyAlias = System.getenv("KEY_ALIAS") ?: "irahmusic"
+      keyPassword = System.getenv("KEY_PASSWORD") ?: "irahmusic123"
       enableV1Signing = true
       enableV2Signing = true
       enableV3Signing = true

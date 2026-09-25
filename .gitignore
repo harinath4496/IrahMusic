@@ -34,4 +34,6 @@ lastfm-empty/build/
 
 # Logs
 *.log
+*.keystore
+*.jks
 release_apks/
