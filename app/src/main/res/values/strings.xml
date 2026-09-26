@@ -3,7 +3,7 @@
 <!-- Upstream InnerTune strings -->
 <!-- Do not add new features here -->
 <!-- Try to re-use strings here, but be careful on its usage e.g. verb vs noun -->
-<!-- "InnerTune" is replaced with "echomusic" -->
+<!-- "InnerTune" is replaced with "IRAH Music" -->
 <!-- Translators: Do not modify this file for translations, use InnerTune's Weblate instead. -->
 
 <resources>
@@ -415,7 +415,7 @@
     <string name="restore_failed">Failed to restore backup</string>
 
     <string name="discord_integration">Discord Integration</string>
-    <string name="discord_information">echomusic uses the KizzyRPC library to set your Discord account\'s status. This involves using the Discord Gateway connection, which may be considered a violation of Discord\'s TOS. However, there are no known cases of user accounts being suspended for this reason. Use at your own risk.\n\echomusic will only extract your token, and everything else is stored locally.</string>
+    <string name="discord_information">IRAH Music uses the KizzyRPC library to set your Discord account\'s status. This involves using the Discord Gateway connection, which may be considered a violation of Discord\'s TOS. However, there are no known cases of user accounts being suspended for this reason. Use at your own risk.\n\IRAH Music will only extract your token, and everything else is stored locally.</string>
     <string name="dismiss">Dismiss</string>
     <string name="options">Options</string>
     <string name="preview">Preview</string>
@@ -495,7 +495,7 @@
     <string name="export_directory_unavailable">Unable to access an export directory on this device. Please set one manually.</string>
     <string name="set_listenbrainz_token">Set ListenBrainz Token</string>
 
-    <!-- Echo Extractor Settings -->
+    <!-- IRAH Extractor Settings -->
     <string name="youtube_decryption_settings">IRAH Extractor</string>
     <string name="youtube_decryption_desc">Configure extractor settings</string>
     <string name="youtube_decryption_support">IRAH Extractor</string>
@@ -646,7 +646,7 @@
     <string name="display_density_desc">Manage Display density settings</string>
     <string name="download_quality_title_desc">Manage Download Quality settings</string>
     <string name="downloaded_songs_desc">Manage Downloaded songs settings</string>
-    <string name="echomusic_1_desc">Manage Vivi Music (Fluid) settings</string>
+    <string name="echomusic_1_desc">Manage IRAH Music (Fluid) settings</string>
     <string name="enable_desc">Enable or disable</string>
     <string name="enable_authentication_desc">Enable or disable authentication</string>
     <string name="enable_dynamic_theme_desc">Enable or disable dynamic theme</string>
@@ -842,7 +842,7 @@
     <string name="listen_together_logs_desc">Manage Connection logs settings</string>
     <string name="listen_together_choose_server_desc">Manage Choose server settings</string>
 
-    <!-- Echo Brain -->
+    <!-- IRAH Brain -->
     <string name="echo_brain_analyzed_artists">Analyzed Artists</string>
     <plurals name="echo_brain_artists_mapped">
         <item quantity="one">%1$d artist mapped</item>
