@@ -472,6 +472,9 @@ class MainActivity : ComponentActivity() {
     downloadUtil: DownloadUtil,
     syncUtils: SyncUtils,
   ) {
+    val navController = rememberNavController()
+    
+    LaunchedEffect(navController) { this@MainActivity.navController = navController }
     val enableDynamicTheme by rememberPreference(DynamicThemeKey, defaultValue = true)
     val enableHighRefreshRate by rememberPreference(EnableHighRefreshRateKey, defaultValue = true)
     val context = LocalContext.current
@@ -710,7 +713,7 @@ class MainActivity : ComponentActivity() {
         val bottomInset = with(density) { windowsInsets.getBottom(density).toDp() }
         val bottomInsetDp = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
 
-        val navController = rememberNavController()
+        
         val homeViewModel: HomeViewModel = hiltViewModel()
         val accountImageUrl by homeViewModel.accountImageUrl.collectAsState()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
