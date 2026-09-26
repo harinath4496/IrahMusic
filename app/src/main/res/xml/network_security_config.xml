@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Base config: do not allow plain HTTP globally to satisfy Play Protect and mobile security engines -->
-    <base-config cleartextTrafficPermitted="false">
+    <!-- Allow cleartext traffic for audio streams, CDN nodes, and local caching -->
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-
-    <!-- Specific domains requiring local network or fallback streaming -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">127.0.0.1</domain>
-        <domain includeSubdomains="true">10.0.2.2</domain>
-        <domain includeSubdomains="true">share.echomusic.fun</domain>
-        <domain includeSubdomains="true">listen-together.onrender.com</domain>
-        <domain includeSubdomains="true">googlevideo.com</domain>
-    </domain-config>
 </network-security-config>

@@ -713,19 +713,15 @@ object YTPlayerUtils {
             }
 
             streamExpiresInSeconds = streamPlayerResponse.streamingData?.expiresInSeconds
-            if (streamExpiresInSeconds == null) {
-              Timber.tag(logTag).d("Stream expiration time not found")
-              cascade += "${client.clientName}=NO_EXPIRE"
-              Fix403.w(
-                fx,
-                "client.noExpire",
-                Fix403.kv(
-                  "client" to client.clientName,
-                  "hasStreamingData" to (streamPlayerResponse.streamingData != null)
-                ),
-              )
-              continue
-            }
+              ?: run {
+                val expireParam = streamUrl?.let { Uri.parse(it).getQueryParameter("expire") }?.toLongOrNull()
+                if (expireParam != null) {
+                  val diff = (expireParam - System.currentTimeMillis() / 1000L).toInt()
+                  if (diff > 0) diff else 21600
+                } else {
+                  21600
+                }
+              }
 
             Timber.tag(logTag).d("Stream expires in: $streamExpiresInSeconds seconds")
 
@@ -857,14 +853,7 @@ object YTPlayerUtils {
         }
 
         if (streamExpiresInSeconds == null) {
-          Timber.tag(logTag).e("Missing stream expire time")
-          logCascade("exhausted")
-          Fix403.e(
-            fx,
-            "resolve.failed",
-            Fix403.kv("videoId" to videoId, "why" to "missingExpireTime")
-          )
-          throw Exception("Missing stream expire time")
+          streamExpiresInSeconds = 21600
         }
 
         if (format == null) {

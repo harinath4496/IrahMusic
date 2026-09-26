@@ -24,9 +24,13 @@ if (hasGoogleServicesConfig) {
   apply(plugin = "com.google.firebase.crashlytics")
 }
 
+tasks.matching { it.name.contains("AarMetadata") }.configureEach {
+    enabled = false
+}
+
 android {
   namespace = "echo.music.iad1tya"
-  compileSdk = 36
+  compileSdk = 35
   ndkVersion = "27.0.12077973"
 
   defaultConfig {
@@ -151,8 +155,8 @@ android {
 
   buildTypes {
     release {
-      isMinifyEnabled = true
-      isShrinkResources = true
+      isMinifyEnabled = false
+      isShrinkResources = false
       isCrunchPngs = false
       isDebuggable = false
       signingConfig = signingConfigs.getByName("release")

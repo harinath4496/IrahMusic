@@ -159,7 +159,6 @@
 -dontwarn io.ktor.**
 
 ## Shazam Models
--keep class com.music.shazamkit.models.** { *; }
 -keepclassmembers class com.music.shazamkit.models.** {
     *;
 }
@@ -184,3 +183,8 @@
 -keepclasseswithmembers class echo.music.iad1tya.listentogether.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+
+
+## API Models to protect kotlinx.serialization
+-keep class com.music.** { *; }
