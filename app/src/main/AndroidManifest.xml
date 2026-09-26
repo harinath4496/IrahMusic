@@ -79,6 +79,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:screenOrientation="unspecified"
             android:theme="@style/Theme.echomusic"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -89,7 +90,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
 
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.APP_MUSIC" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -454,21 +454,6 @@
             android:name="com.google.android.gms.cast.framework.ReconnectionService"
             android:exported="false"
             android:process=":reconnection_service" />
-        <!-- Music Widget -->
-        <receiver
-            android:name=".widget.MusicWidgetReceiver"
-            android:exported="true"
-            android:label="@string/widget_music_player">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="echo.music.iad1tya.widget.PLAY_PAUSE" />
-                <action android:name="echo.music.iad1tya.widget.LIKE" />
-                <action android:name="echo.music.iad1tya.widget.UPDATE_WIDGET" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/music_widget_info" />
-        </receiver>
 
         <!-- Playlist Widget -->
         <receiver
