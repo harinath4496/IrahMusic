@@ -674,6 +674,31 @@ suspend fun checkForUpdate(
 ) {
   withContext(Dispatchers.IO) {
     try {
+      // Automatic update checking disabled in custom developer build
+      onSuccess(BuildConfig.VERSION_NAME, false, emptyList(), "", "", null, null, null)
+    } catch (e: Exception) {
+      onError()
+    }
+  }
+}
+
+suspend fun originalCheckForUpdateDisabled(
+  context: Context,
+  onSuccess:
+    (
+      tag: String,
+      isAvailable: Boolean,
+      changelog: List<ChangelogSection>,
+      size: String,
+      date: String,
+      description: String?,
+      imageUrl: String?,
+      apkUrl: String?
+    ) -> Unit,
+  onError: () -> Unit,
+) {
+  withContext(Dispatchers.IO) {
+    try {
       val url = URL("https://api.github.com/repos/harinath4496/IrahMusic/releases/latest")
       val json = url.openStream().bufferedReader().use { it.readText() }
       val targetRelease = JSONObject(json)

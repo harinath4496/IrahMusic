@@ -987,7 +987,7 @@ fun BottomSheetPlayer(
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().blur(if (useDarkTheme) 150.dp else 100.dp)
+                    modifier = Modifier.fillMaxSize().blur(if (useDarkTheme) 30.dp else 25.dp)
                   )
                   Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f)))
                 }
@@ -1201,7 +1201,7 @@ fun BottomSheetPlayer(
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().blur(150.dp)
+                    modifier = Modifier.fillMaxSize().blur(30.dp)
                   )
 
                   val clearArtworkAlpha by
@@ -1340,7 +1340,7 @@ fun BottomSheetPlayer(
                     contentScale = ContentScale.Crop,
                     colorFilter = colorFilter,
                     modifier =
-                      Modifier.fillMaxSize().blur(100.dp).graphicsLayer {
+                      Modifier.fillMaxSize().blur(25.dp).graphicsLayer {
                         rotationZ = anchorRotation
                       }
                   )
@@ -1357,7 +1357,7 @@ fun BottomSheetPlayer(
                     colorFilter = colorFilter,
                     alignment = Alignment.TopStart,
                     modifier =
-                      Modifier.fillMaxSize().blur(120.dp).graphicsLayer {
+                      Modifier.fillMaxSize().blur(25.dp).graphicsLayer {
                         rotationZ = fastRotation
                         alpha = 0.6f
                       }
@@ -1375,7 +1375,7 @@ fun BottomSheetPlayer(
                     colorFilter = colorFilter,
                     alignment = Alignment.BottomEnd,
                     modifier =
-                      Modifier.fillMaxSize().blur(120.dp).graphicsLayer {
+                      Modifier.fillMaxSize().blur(25.dp).graphicsLayer {
                         rotationZ = slowRotation
                         alpha = 0.5f
                       }

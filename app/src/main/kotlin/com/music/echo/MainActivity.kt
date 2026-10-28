@@ -478,6 +478,7 @@ class MainActivity : ComponentActivity() {
     val enableDynamicTheme by rememberPreference(DynamicThemeKey, defaultValue = true)
     val enableHighRefreshRate by rememberPreference(EnableHighRefreshRateKey, defaultValue = true)
     val context = LocalContext.current
+    var showDeveloperCreditDialog by remember { androidx.compose.runtime.mutableStateOf(true) }
     var showUpdateDialog by remember { androidx.compose.runtime.mutableStateOf(false) }
     var availableUpdateVersion by remember { androidx.compose.runtime.mutableStateOf("") }
     var availableUpdateChangelog by remember {
@@ -522,56 +523,11 @@ class MainActivity : ComponentActivity() {
     }
 
     LaunchedEffect(Unit) {
-      val prefs = context.dataStore.data.first()
-
-      if (getAutoUpdateCheckSetting(context)) {
-        try {
-          val workManager = androidx.work.WorkManager.getInstance(applicationContext)
-          val updateWorkRequest =
-            androidx.work.PeriodicWorkRequestBuilder<echo.music.iad1tya.echomusic.updater.UpdateCheckWorker>(
-              6,
-              java.util.concurrent.TimeUnit.HOURS
-            )
-            .setConstraints(
-              androidx.work.Constraints.Builder()
-                .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
-                .build()
-            )
-            .build()
-          workManager.enqueueUniquePeriodicWork(
-            "UpdateCheckWorker",
-            androidx.work.ExistingPeriodicWorkPolicy.KEEP,
-            updateWorkRequest
-          )
-        } catch (e: Exception) {
-          Log.e("UpdateCheck", "Failed to schedule background update worker", e)
-        }
-
-        delay(2000L)
-        checkForUpdate(
-          context = context,
-          onSuccess = { latestVersion, isAvailable, changelog, _, _, description, _, _ ->
-            val currentVersion = BuildConfig.VERSION_NAME
-            Log.d(
-              "UpdateCheck",
-              "Startup check success. Latest: $latestVersion, Current: $currentVersion, isAvailable: $isAvailable"
-            )
-            saveUpdateAvailableState(context, isAvailable)
-
-            if (isAvailable) {
-              availableUpdateVersion = latestVersion
-              availableUpdateChangelog = changelog
-              availableUpdateDescription = description
-              showUpdateDialog = true
-            }
-
-            if (isAvailable && getUpdateNotificationsSetting(context)) {
-              Log.d("UpdateCheck", "Posting update notification for $latestVersion")
-              UpdateNotificationHelper.showUpdateNotification(context, latestVersion)
-            }
-          },
-          onError = { Log.e("UpdateCheck", "Startup check failed") }
-        )
+      try {
+        val workManager = androidx.work.WorkManager.getInstance(applicationContext)
+        workManager.cancelUniqueWork("UpdateCheckWorker")
+      } catch (e: Exception) {
+        Log.e("UpdateCheck", "Failed to cancel background update worker", e)
       }
     }
 
@@ -673,7 +629,11 @@ class MainActivity : ComponentActivity() {
       pureBlack = pureBlack,
       themeColor = themeColor,
     ) {
-      if (showUpdateDialog) {
+      if (showDeveloperCreditDialog) {
+        echo.music.iad1tya.echomusic.component.DeveloperCreditDialog(
+          onDismiss = { showDeveloperCreditDialog = false }
+        )
+      } else if (showUpdateDialog) {
         echo.music.iad1tya.echomusic.component.UpdateAvailableDialog(
           version = availableUpdateVersion,
           changelog = availableUpdateChangelog,
